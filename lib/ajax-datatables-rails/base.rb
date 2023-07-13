@@ -62,6 +62,10 @@ module AjaxDatatablesRails
       raise(NotImplementedError)
     end
 
+    def default_sort_records(records)
+      records
+    end
+
     def paginate_records(records)
       raise(NotImplementedError)
     end
@@ -132,6 +136,7 @@ module AjaxDatatablesRails
       records = fetch_records
       records = filter_records(records)
       records = sort_records(records)     if datatable.orderable?
+      records = default_sort_records(records)
       records = paginate_records(records) if datatable.paginate?
       records
     end

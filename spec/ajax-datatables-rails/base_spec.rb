@@ -113,6 +113,12 @@ RSpec.describe AjaxDatatablesRails::Base do
         end
       end
 
+      describe '#default_sort_records' do
+        it 'returns the result unchanged if it does not include an ORM module' do
+          expect(datatable.default_sort_records([])).to match_array([])
+        end
+      end
+
       describe '#paginate_records' do
         it 'raises an error if it does not include an ORM module' do
           expect { datatable.paginate_records([]) }.to raise_error NotImplementedError
@@ -129,6 +135,10 @@ RSpec.describe AjaxDatatablesRails::Base do
             end
 
             def sort_records(records)
+              raise NotImplementedError.new('FOO')
+            end
+
+            def default_sort_records(records)
               raise NotImplementedError.new('FOO')
             end
 
@@ -158,6 +168,12 @@ RSpec.describe AjaxDatatablesRails::Base do
         end
 
         describe '#sort_records' do
+          it {
+            expect { datatable.sort_records([]) }.to raise_error(NotImplementedError).with_message('FOO')
+          }
+        end
+
+        describe '#default_sort_records' do
           it {
             expect { datatable.sort_records([]) }.to raise_error(NotImplementedError).with_message('FOO')
           }
